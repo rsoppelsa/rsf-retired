@@ -1,7 +1,7 @@
 # rsf - really simple framework
 ## *write HTML in Javascript*
 
-rsf lets you write web pages in the browser using only Javascript. In conjunction with technologies line node.js it allows you to create web sites in one language.
+rsf lets you write web pages in the browser using only Javascript. In conjunction with technologies like node.js it allows you to easily create web sites in just Javascript.
 
 ## Getting Started
 rsf's only dependancy is jQuery - any recent version should suffice. Create a minimal web page in html, include jQuery, the rsf library itself and a container element for rsf to target. The rsf application itself is written in Javascript, usually in a separate .js file:
@@ -94,6 +94,37 @@ The attributes object is applied to the element which is currently being rendere
 
 -
 
+## The bind object
+Bind objects comprise a get function (getter) and a set function (setter). The get and set function allows a variable to be associated with an element. The get function is called whenever the element binds to return the variable value to the element. The set function is called whenever the element needs to update the value of the variable. 
+
+For example, an INPUT element of type "text" may use a bind object to "bind" a variable "myvar" to the element. Whenever this element binds the value of "myvar" will be displayed in the text box. Whenever a user types in the text box "myvar" will receive the new value;
+
+```
+var myvar = 'hello';
+r.input({
+    attr: {type: "text"}, input: {
+        get: function () {
+            return myvar;
+        }, set: function (x) {
+            myvar = x;
+        }
+    }
+});
+
+```
+
+**Arguments**
+- `get` - a function that must return the value that binds to the element
+- `set(value, context)` - a function that must set the bound variable to the passed value. A context is also supplied to the setter function. 
+
+When binding an element that only requires a getter it is acceptable to specify a function (returning a value) or a value rather than a full bind object. This is often shorter and more convenient, e.g:
+
+```
+r.h1(text: "my big header"});
+```
+
+
+It is also possible to pass a function rather than a 
 
 bind function - get/set
 
