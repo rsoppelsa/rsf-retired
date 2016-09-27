@@ -3,6 +3,8 @@
 
 rsf lets you write web pages in the browser using only Javascript. In conjunction with technologies like node.js it allows you to easily create web sites in just Javascript.
 
+Page state can be simply stored within a page as Javascript variables. HTML structures can be represented in code which can, in turn, be encapulated as functions. This makes HTML templating and repitition trivial.
+
 ## Getting Started
 rsf's only dependancy is jQuery - any recent version should suffice. Create a minimal web page in html, include jQuery, the rsf library itself and a container element for rsf to target. The rsf application itself is written in Javascript, usually in a separate .js file:
 
@@ -95,11 +97,11 @@ The attributes object is applied to the element which is currently being rendere
 -
 
 ## The bind object
-Bind objects comprise a get function (getter) and a set function (setter). The get and set function allows a variable to be associated with an element. The get function is called whenever the element binds to return the variable value to the element. The set function is called whenever the element needs to update the value of the variable. 
+Bind objects comprise a get function (getter) and a set function (setter). The get and set functions allow a variable to be associated with an element. The get function is called whenever the element binds to return the variable value to the element. The set function is called whenever the element needs to update the value of the variable. 
 
 For example, an INPUT element of type "text" may use a bind object to "bind" a variable "myvar" to the element. Whenever this element binds the value of "myvar" will be displayed in the text box. Whenever a user types in the text box "myvar" will receive the new value;
 
-```
+```javascript
 var myvar = 'hello';
 r.input({
     attr: {type: "text"}, input: {
@@ -120,11 +122,30 @@ r.input({
 When binding an element that only requires a getter it is acceptable to specify a function (returning a value) or a value rather than a full bind object. This is often shorter and more convenient, e.g:
 
 ```
-r.h1(text: "my big header"});
+r.h1({text: "my big header"});
 ```
 
+## The rsf lifecycle
+When a web page is displayed the HTML page is rendered and any scripts (including the rsf application) are run. The rsf application should target one or more container elements on the page. Each rsf object then renders HTML inside it's container. 
 
-It is also possible to pass a function rather than a 
+The HTML inside the container is created during the render phase. The hierarchy or tree of HTML elements is created by the subsequent invocation of the children functions for each element. traversal order ??
 
-bind function - get/set
+Once all the HTML has been created the first bind phase starts. The bind object getter functions are called for all the rsf attributes on each element. Binding occurs on elements in the same order in which they were rendered. 
+
+This is the end of the lifecycle. However, the application can choose to render or bind the entire container or parts of it at any time. The application targets a part of the container by referencing an element by it's rsf ID. The element, and all it's children, is then rendered and/or bound. A bind phase always follows a render phase.
+
+> The structure of the HTML within a container (by adding or removing elements) can only be changed by rendering again.  Binding can happen at ant time but it assumes that the page structure has not changed. Basically, don't add or remove  elements by using DOM or jQuery functions independently of rsf.
+
+## The rsf object
+The rsf object supports the following methods:
+
+**Methods**
+- `render(id)` - initiates a render starting on the element identified by the id parameter. If no id parameter is supplied the entire target container is rendered
+- `bind(id)` - initiates a bind starting on the element identified by the id parameter. If no id parameter is supplied the entire target container is bound
+- `text(text)` - renders in-line text (using the DOM createTextNode function)
+- `elem()` - ....
+
+
+
+
 
