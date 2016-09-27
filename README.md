@@ -8,7 +8,7 @@ Page state can be simply stored within a page as Javascript variables. HTML stru
 ## Getting Started
 rsf's only dependancy is jQuery - any recent version should suffice. Create a minimal web page in html, include jQuery, the rsf library itself and a container element for rsf to target. The rsf application itself is written in Javascript, usually in a separate .js file:
 
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,7 +48,7 @@ The attributes object is applied to the element which is currently being rendere
 - `id` - a string which may be used to identify the element so it may be targetted in future render or bind operations (note this is different from the HTML ID attribute)
 - `attr` - an object which is passed directly to the jQuery attr() function the results of which will be applied to he current element
 - `css` - an object which is passed directly to the jQuery css() function the results of which will be applied to he current element
-- `text` - a string (or function returning a string)which is passed directly to the jQuery text() function and will be rendered as innerText on the current element (children?)
+- `text` - a string (or function returning a string) which is passed directly to the jQuery text() function and will be rendered as innerText on the current element (children?)
 
 
 **Arguments**
@@ -64,37 +64,27 @@ The elem method creates any HTML element at the current rendering location. A nu
 - `children(r)` - a callback which is called to render children of this element. `r` is the rsf object
 -
 ## The attributes object
-The attributes object is applied to the element which is currently being rendered.
+The attributes object contains members that that are active during the render and/or bind phases. 
 
 **Arguments**
-- `tag` - the type of HTML element to create
-- `id` - a string which may be used to identify the element so it may be targetted in future render or bind operations (note this is different from the HTML ID attribute)
-- `attr` - an object which is passed directly to the jQuery attr() function the results of which will be applied to he current element
-- `css` - an object which is passed directly to the jQuery css() function the results of which will be applied to he current element
-- `text` - a string (or function returning a string) which is passed directly to the jQuery text() function and will be rendered as innerText on the current element (children?) +bind
-- `click` - an event function that is called when the rendered element is "clicked"
-- `check` - a function which is called when the state of an input checkbox changes
-- `href` - a string (or function returning a string) which calls the jQuery attr() function to set the "href" attribute of the element (usually an A tag)
-- `src` - a string (or function returning a string) which calls the jQuery attr() function to set the "src" attribute of the element (usually an IMG tag)
-- `class`
-- `disable` - a bind function which gets a boolean to add or remove a "disabled" attribute on the element
-- `hide` - a bind function which gets a boolean to hide or show the element
-- `show` - a bind function which gets or sets a boolean to hide or show the element
-- `input` - a bind function which gets or sets a string that is displayed in the element (usually an INPUT tag of type "text" or similar) - uses the jQuery on + input
-- `select` - a bind function which gets or sets the selected option in a SELECT tag - can return the option value or it's index - useValue flag
-- `blur` -  an event function that is called when the rendered element is "blurred" (loses focus)
-- `title` -  a bind function which gets a string that sets the "title" attribute of the element
-- `enter` -   an event function that is called when the rendered element is receives a "keyup" event for the "enter" key
--
-
-
--
--
--
-- a string (or function returning a string) which is passed directly to the jQuery text() function and will be rendered as innerText on the current element (children?)
-- `text` - a string (or function returning a string) which is passed directly to the jQuery text() function and will be rendered as innerText on the current element (children?)
-
--
+- `tag` - the type of HTML element to create (render)
+- `id` - a string which may be used to identify the element so it may be targetted in future render or bind operations (note this is different from the HTML ID attribute) (render)
+- `attr` - an object which is passed directly to the jQuery attr() function the results of which will be applied to he current element (render)
+- `css` - an object which is passed directly to the jQuery css() function the results of which will be applied to the current element (render)
+- `text` - a string (or function returning a string) which is passed directly to the jQuery text() function and will be rendered as innerText on the current element (children?) (render+bind)
+- `click` - an event object that is called when the rendered is "clicked" 
+- `check` - a bind object which binds a boolean to an element (usually an INPUT tag of type "checkbox") (bind)
+- `href` - a bind object which binds a string to set the "href" attribute of the element (usually an A tag) (bind)
+- `src` - a bind object which binds a string to set the "src" attribute of the element (usually an IMG tag) (bind)
+- `class` -  a bind object which binds a string to add a class attribute of the element. This object also supports an "add" member (default true) which specifies if the class should be added or removed from the element.  (bind)
+- `disable` - a bind object which binds a boolean to the element add or remove a "disabled" attribute (bind)
+- `hide` - a bind object which binds a boolean to the element add or remove a "disabled" attribute (bind)
+- `show` - a bind object which binds a boolean to the element to hide or show the element (bind)
+- `input` - a bind object which binds a string to the element (usually an INPUT tag of type "text" or similar) (bind)
+- `select` - a bind object which binds a value the selected option in a SELECT tag. This object also supports an "useValue" member (default false) which specifies if the value specified the OPTION tag index or value (bind)
+- `blur` -  an event object that is called when the rendered element is "blurred" (loses focus)
+- `title` -  a bind object which binds a string to the "title" attribute of the element (bind)
+- `enter` -  an event object that is called when the rendered element is receives a "keyup" event for the "enter" key
 
 ## The bind object
 Bind objects comprise a get function (getter) and a set function (setter). The get and set functions allow a variable to be associated with an element. The get function is called whenever the element binds to return the variable value to the element. The set function is called whenever the element needs to update the value of the variable. 
@@ -121,9 +111,24 @@ r.input({
 
 When binding an element that only requires a getter it is acceptable to specify a function (returning a value) or a value rather than a full bind object. This is often shorter and more convenient, e.g:
 
-```
+```javascript
 r.h1({text: "my big header"});
 ```
+
+## The event object
+Event objects comprise just an event function which is called whenever the element generate the relevent DOM event. For example, a BUTTON element can use an event object to handle a click:
+
+```javascript
+r.button({
+    attr: {type: "button"}, 
+	text: "my button",
+    click: function () {
+        myHandler();
+    }
+});
+```
+
+
 
 ## The rsf lifecycle
 When a web page is displayed the HTML page is rendered and any scripts (including the rsf application) are run. The rsf application should target one or more container elements on the page. Each rsf object then renders HTML inside it's container. 
