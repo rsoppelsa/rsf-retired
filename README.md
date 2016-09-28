@@ -56,7 +56,7 @@ The rsf constructor initiates the rendering of rsf content and encapsulates the 
 
 
 ## rsf methods
-### elem([attributes], children)
+### elem([attributes], [children])
 The `elem` method creates any HTML element at the current rendering location. A shortcut method can be used instead of the calling `elem` method directly. These shortcuts create some of the more commonly used HTML elements: 
 
 - div
@@ -93,17 +93,28 @@ The `elem` method creates any HTML element at the current rendering location. A 
 - `attributes` - *Optional* An attributes object (see below) which is applied to the rendered element
 - `children(r)`- *Optional* A callback which is called to render children of this element. `r` is the rsf object
 
+**Examples**
+
+```javascript
+    r.elem({tag: 'code', text: 'there is no shortcut for this tag'});
+```
+
+
+
 ### render(id)
+
 Initiates a render starting on the element identified by the id parameter. If no id parameter is supplied the entire target container is rendered.
 
 **Arguments**
 - `id` - *Optional* A string referencing an `rsf` id. 
+
 
 ### bind(id)
 Initiates a bind starting on the element identified by the id parameter. If no id parameter is supplied the entire target container is bound.
 
 **Arguments**
 - `id` - *Optional* A string referencing an `rsf` id. 
+
 
 ### text(content)
 Renders in-line text (using the DOM createTextNode function).
