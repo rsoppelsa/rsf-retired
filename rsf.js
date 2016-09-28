@@ -92,6 +92,7 @@ function RSF(root, child, children, options) {
     this.elem = function(child, children) { // called by app to create elements during render phase
         var elem;
         var context = {};
+        if (!child) child = {};
         if (rsf.parent != null) {
             if (!child.tag) return;
             if (child.render != undefined) {
