@@ -33,6 +33,7 @@ rsf's only dependancy is jQuery - any recent version should suffice. Create a mi
 </body>
 </html>
 ```
+All the following examples assume the same page structure with a container DIV having an id "container".
 
 ## The rsf lifecycle
 When a web page is displayed the HTML page is rendered and any scripts (including the rsf application) are run. The rsf application should target one or more container HTML elements on the page. Each rsf object then renders HTML inside it's container. 
@@ -44,6 +45,22 @@ Once all the HTML has been created the first bind phase starts. The bind object 
 This is the end of the lifecycle. However, the application can choose to render or bind the entire container or parts of it at any time. The application targets a part of the container by referencing an element by it's rsf ID. The element, and all it's children, are then rendered and/or bound.
 
 > The structure of the HTML within a container (by adding or removing elements) can only be changed by rendering again.  Binding can happen at ant time but it assumes that the page structure has not changed. Basically, don't add or remove  elements by using DOM or jQuery functions independently of rsf.
+
+```javascript
+    var items = ["item 1"];
+    var rsf = new RSF("#container", {id: "my-app"}, function(r) {
+        r.ul({id: "list"}, function(r) {
+            for (var i = 0; i < items.length; i++) {
+							r.li({text: items[i]});
+            }        
+        });
+        r.button({attr: {type: "button"}, text: "add item", click: function() {
+        		items.push("item "+ (items.length+1));
+            r.render("list");
+        }})
+    });
+```
+
 
 ## The rsf Constructor
 ### RSF(target, [attributes], children)
