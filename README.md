@@ -26,7 +26,7 @@ rsf's only dependancy is jQuery - any recent version should suffice. Create a mi
 
 <script>
     // usually rsf application code would reside in it's own .js file
-    var rsf = new RSF("#main", {id: "record", attr: {class: "container"}}, function(r) {
+    var rsf = new RSF("#container", {id: "my-app"}, function(r) {
         r.text("hello world!");
     });
 </script>
@@ -55,6 +55,63 @@ The rsf constructor initiates the rendering of rsf content and encapsulates the 
 - `children(r)` - A callback which is called to render children of this element. `r` is the rsf object and subsequent calls to the `elem` method build the page structure.
 
 
+## rsf methods
+### elem([attributes], children)
+The `elem` method creates any HTML element at the current rendering location. A number of shortcut methods are usually used instead of the calling `elem` method directly. These shortcuts create some of the more commonly used HTML elements: 
+
+- div
+- span
+- h1
+- h2
+- h3
+- h4
+- h5
+- a
+- select
+- button
+- table
+- tr
+- td
+- label
+- input
+- form
+- hr
+- pre
+- img
+- i
+- p
+- canvas
+- textarea
+- strong
+- ul
+- li
+- br
+
+** TO DO ** add method to install shortcuts (for now just edit the rsf source)
+
+**Arguments**
+- `attributes` - *Optional* An attributes object (see below) which is applied to the rendered element
+- `children(r)`- *Optional* A callback which is called to render children of this element. `r` is the rsf object
+
+### render(id)
+Initiates a render starting on the element identified by the id parameter. If no id parameter is supplied the entire target container is rendered.
+
+**Arguments**
+- `id` - *Optional* A string referencing an `rsf` id. 
+
+### bind(id)
+Initiates a bind starting on the element identified by the id parameter. If no id parameter is supplied the entire target container is bound.
+
+**Arguments**
+- `id` - *Optional* A string referencing an `rsf` id. 
+
+### text(content)
+Renders in-line text (using the DOM createTextNode function).
+
+**Arguments**
+- `content` - A string.
+
+
 
 
 
@@ -70,14 +127,12 @@ The attributes object is applied to the element which is currently being rendere
 **Arguments**
 - `target` - a jQuery selector, element or jQuery object which specifies the container element
 - `attributes` - *Optional* an rsf attributes object (see below) which is applied to the container element
-- `children(r)` - a callback which is called to render children of this element. `r` is the rsf object
+- `child- `render(id)` - initiates a render starting on the element identified by the id parameter. If no id parameter is supplied the entire target container is rendered
+- `bind(id)` - initiates a bind starting on the element identified by the id parameter. If no id parameter is supplied the entire target container is bound
+- `text(text)` - renders in-line text (using the DOM createTextNode function)
+- `elem()` - ....ren(r)` - a callback which is called to render children of this element. `r` is the rsf object
 
-### elem([attributes], children)
-The elem method creates any HTML element at the current rendering location. A number of shortcut methods are usually used instead of the elem method. These shortcuts create some of the more commonly used HTML elements: div, span, h1, h2.....
 
-**Arguments**
-- `attributes` - *Optional* an elem attributes object (see below) which is applied to the rendered element
-- `children(r)` - a callback which is called to render children of this element. `r` is the rsf object
 -
 ## The attributes object
 The attributes object contains members that that are active during the render and/or bind phases. 
@@ -162,10 +217,7 @@ The attributes object contains members that that are active during the render an
 The rsf object supports the following methods:
 
 **Methods**
-- `render(id)` - initiates a render starting on the element identified by the id parameter. If no id parameter is supplied the entire target container is rendered
-- `bind(id)` - initiates a bind starting on the element identified by the id parameter. If no id parameter is supplied the entire target container is bound
-- `text(text)` - renders in-line text (using the DOM createTextNode function)
-- `elem()` - ....
+
 
 
 **Authors:** Richard Soppelsa, Martin Verrall
