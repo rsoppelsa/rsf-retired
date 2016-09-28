@@ -3,7 +3,7 @@
 
 rsf lets you write web pages in the browser using only Javascript. In conjunction with technologies like node.js it allows you to easily create web sites in just Javascript.
 
-Page state can be simply stored within a page as Javascript variables. HTML structures can be represented in code which can, in turn, be encapulated as functions. This makes HTML templating and repitition trivial.
+HTML structures can be represented in code which can, in turn, be encapulated as functions. This makes HTML templating and repitition trivial. Page state can be simply stored within the page as Javascript variables. 
 
 ## Getting Started
 rsf's only dependancy is jQuery - any recent version should suffice. Create a minimal web page in html, include jQuery, the rsf library itself and a container element for rsf to target. The rsf application itself is written in Javascript, usually in a separate .js file:
@@ -50,9 +50,13 @@ This is the end of the lifecycle. However, the application can choose to render 
 The rsf constructor initiates the rendering of rsf content and encapsulates the remainder of the application through its `children` callback. A web page may contain multiple containers each targeted by a different instance of rsf.
 
 **Arguments**
-- `target` - a jQuery selector, element or jQuery object which specifies the container element
+- `target` - A jQuery selector, element or jQuery object which specifies the container element.
 - `attributes` - *Optional* an rsf attributes object (see below) which is applied to the container element
-- `children(r)` - a callback which is called to render children of this element. `r` is the rsf object
+- `children(r)` - A callback which is called to render children of this element. `r` is the rsf object and subsequent calls to the `elem` method build the page structure.
+
+
+
+
 
 ## The rsf attributes object
 The attributes object is applied to the element which is currently being rendered.
