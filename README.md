@@ -33,6 +33,9 @@ rsf's only dependancy is jQuery - any recent version should suffice. Create a mi
 </body>
 </html>
 ```
+
+View this example on [jsFiddle](https://jsfiddle.net/rsoppelsa/zrrbr97y/)
+
 All the following examples assume the same page structure with a container DIV having an id "container".
 
 ## The rsf lifecycle
@@ -45,6 +48,10 @@ Once all the HTML has been created the first bind phase starts. The bind object 
 This is the end of the lifecycle. However, the application can choose to render or bind the entire container or parts of it at any time. The application targets a part of the container by referencing an element by it's rsf ID. The element, and all it's children, are then rendered and/or bound.
 
 > The structure of the HTML within a container (by adding or removing elements) can only be changed by rendering again.  Binding can happen at ant time but it assumes that the page structure has not changed. Basically, don't add or remove  elements by using DOM or jQuery functions independently of rsf.
+
+**Example**
+
+The following example shows the UL element being re-rendered on every BUTTON click because new OPTION tags are being added.
 
 ```javascript
     var items = ["item 1"];
@@ -61,6 +68,7 @@ This is the end of the lifecycle. However, the application can choose to render 
     });
 ```
 
+View this example on [jsFiddle](https://jsfiddle.net/rsoppelsa/c0t0k8wx/)
 
 ## The rsf Constructor
 ### RSF(target, [attributes], children)
@@ -112,11 +120,79 @@ The `elem` method creates any HTML element at the current rendering location. A 
 
 **Examples**
 
+Render any element with the `elem` method.
+
 ```javascript
-    r.elem({tag: 'code', text: 'there is no shortcut for this tag'});
+    r.elem({tag: 'code', text: 'there is no shortcut for a code tag'});
 ```
+This example shows a variable being bound to two controls. Typing in the INPUT tag invokes a setter function when then re-binds the SPAN.
 
+```javascript
+var textbox = 'abc';
+var rsf = new RSF("#container", {id: "my-app"}, function (r) {
+    r.input({
+        attr: {type: "text"}, input: {
+            get: function () {
+                return textbox;
+            }, set: function (x) {
+                textbox = x;
+                r.bind("myspan");
+            }
+        }
+    });
+    r.p({id: "myspan"}, function (r) {
+        r.span({
+            text: function () {
+                return textbox
+            }
+        })
+    })
+});
+```
+View this example on [jsFiddle](https://jsfiddle.net/rsoppelsa/87zznLfw/)
 
+Encapsule table layout in a function that can be called as required.
+```javascript
+var rsf = new RSF("#container", {id: "my-app"}, function(r) {
+
+    var planets = [{planet: "earth", colour: "blue"}, {planet: "mars", colour: "red"}];
+    table(r, {}, planets, ["planet", "colour"], function(item, i) {
+        r.td({text: item.planet});
+        r.td({text: item.colour});
+    });
+
+    function table(r, attr, items, headings, cbRepeat, cbEmpty) {
+        r.table(attr, function() {
+            if (headings && $.isArray(headings) && headings.length > 0) {
+                r.elem({tag: "thead"}, function () {
+                    r.elem({tag: "tr"}, function () {
+                        for (var i = 0; i < headings.length; i++) {
+                            r.elem({tag: "th"}, function () {
+                                r.span({text: headings[i]});
+                            })
+                        }
+                    })
+                })
+            }
+            r.elem({tag: "tbody"}, function () {
+                if (items && $.isArray(items) && items.length > 0) {
+                    for (var i = 0; i < items.length; i++) {
+                        r.elem({tag: "tr"}, function () {
+                            if (cbRepeat) cbRepeat(items[i], i);
+                        })
+                    }
+                }
+                else {
+                    r.elem({tag: "tr"}, function () {
+                        if (cbEmpty) cbEmpty();
+                    })
+                }
+            })
+        });
+    }
+});
+```
+View this example on [jsFiddle](https://jsfiddle.net/rsoppelsa/4gbb8793/)
 
 ### render(id)
 
