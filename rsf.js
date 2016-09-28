@@ -1,6 +1,6 @@
 /**
- rsf - reasy simple framework - write HTML in Javascript
- Copyright (C) 2016  Web Essentials Ltd
+ rsf - really simple framework - write HTML in Javascript
+ Copyright (C) 2016  Richard Soppelsa
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@ function RSF(root, child, children, options) {
     this.parent = null;
     this.options = options;
     this.start = this.root;
-
 
     this.render = function(id) { // starts a render
 
@@ -91,7 +90,6 @@ function RSF(root, child, children, options) {
     }
 
     this.elem = function(child, children) { // called by app to create elements during render phase
-
         var elem;
         var context = {};
         if (rsf.parent != null) {
@@ -104,7 +102,6 @@ function RSF(root, child, children, options) {
             }
             var node = document.createElement(child.tag);
             elem = rsf.parent.appendChild(node);
-            //console.log("binding: " + elem.tagName + ", parent: " + rsf.parent.tagName);
         }
         else { // render has just started - we just apply attributes etc to starting elem
             elem = rsf.start;
@@ -113,10 +110,6 @@ function RSF(root, child, children, options) {
 
         $(elem).data("rsf-child", child); // store link to child object
         $(elem).data("rsf-children", children); // store link to children callback
-
-        if (child.id != undefined) {
-//            elem.id = child.id; // we no longer set the element id
-        }
 
         if (child.attr != undefined) { // we always try to add attributes
             $(elem).attr(child.attr);
@@ -156,7 +149,6 @@ function RSF(root, child, children, options) {
     }
 
     this.bind = function(id) {
-
         var found = findElement(id);
         if (found) {
             rsf.start = found.elem;
@@ -166,13 +158,10 @@ function RSF(root, child, children, options) {
     }
 
     function bind(elem, render) {
-        //console.log("binding: " + elem.tagName);
         var child = $(elem).data("rsf-child"); // get link to child
-        //var children = $(elem).data("rsf-child"); // get link to child
 
         if (!child) return; // we cant bind elements without rsf data
 
-        //var context = {child: child, elem: elem, index: 0, data: null}; //???
         var context = {elem: elem, render: render}; // we always supply the raw element
         if (child.data != undefined) context.data = child.data; // pass back data attached to this child
 
@@ -296,7 +285,8 @@ function RSF(root, child, children, options) {
                 })
             }
         }
-        if (child.typeahead != undefined) { // use with input element
+        // code commented out because of external dependency but left as example of writing a bind function
+        /*if (child.typeahead != undefined) { // use with input element
             var s = get(child.typeahead, context); // text to be displayed in input
             $(elem).val(s);
             if (render) {
@@ -307,7 +297,6 @@ function RSF(root, child, children, options) {
                         if ($.isPlainObject(x)) {
                             s = s.name;
                         }
-                        console.log("set: " + s);
                         set(child.typeahead, s, context); // text of selected item
                     }
                 });
@@ -315,15 +304,15 @@ function RSF(root, child, children, options) {
                     $(elem).on('input', null, null, function (e) { // >IE9
                         //console.log($(elem).typeahead("getActive"));
                         if ($(elem).val() == "") {
-                            console.log("set: " + "");
                             set(child.typeahead, "", context); // text of selected item
                         }
                     })
                 }
 
             }
-        }
-        if (child.summernote != undefined) { // encapsulates http://summernote.org/ html editor
+        }*/
+        // code commented out because of external dependency but left as example of writing a bind function
+        /*if (child.summernote != undefined) { // encapsulates http://summernote.org/ html editor
             var s = get(child.summernote, context);
             if (render) {
                 if (child.summernote.options) {
@@ -342,7 +331,7 @@ function RSF(root, child, children, options) {
                 }
             }
             $(elem).summernote('code', s); // bind value to page
-        }
+        }*/
         if (child.blur != undefined) {
             if (render) {
                 $(elem).on('blur', null, child.blur, function (e) {
@@ -382,14 +371,12 @@ function RSF(root, child, children, options) {
         if ($.isPlainObject(x)) {
             obj = x;
         }
-        //var data = {}
         if ($.isFunction(obj.get)) { // call as getter
             s = obj.get(c);
         }
         else if (obj.get != null) {
             s = obj.get;
         }
-        //console.log("getting: " + s);
         return(s);
     }
 
@@ -444,61 +431,6 @@ function RSF(root, child, children, options) {
 
 }
 
-function select(r, select, options) {
-    r.select(select, function() {
-        if ($.isFunction(options)) options = options();
-        if ($.isArray(options)) options = {items: options}; // user can just pass an array
-        var items = options.items;
-        var t = options.text;
-        var v = options.value;
-        if (t == undefined) var t = "text";
-        if (v == undefined) var v = "value";
-        var ca = [];
-        for (var i = 0; i < items.length; i++) {
-            var o = items[i];
-            r.elem({tag: "option", attr: {value: o[v]}, text: o[t]});
-        }
-    });
-}
-
-function table(r, table, items, headings, cbRepeat, cbEmpty, orderParam) {                          //orderParam is the query string, i.e q
-    r.table(table, function() {
-        if (headings && $.isArray(headings) && headings.length > 0) {
-            r.elem({tag: "thead"}, function () {
-                r.elem({tag: "tr"}, function () {
-                    for (var i = 0; i < headings.length; i++) {
-                        if(orderParam) {
-                            buildHeading(r, headings[i], orderParam)                                //only build responsive headings if orderParam
-                        }
-                        else {
-                            r.elem({tag: "th"}, function () {
-                                r.a({
-                                    attr: {style: 'color: black'}, href: "#"
-                                }, function () {
-                                    r.span({text: headings[i]});                                //basic headings still available
-                                });
-                            })
-                        }
-                    }
-                })
-            })
-        }
-        r.elem({tag: "tbody"}, function () {
-            if (items && $.isArray(items) && items.length > 0) {
-                for (var i = 0; i < items.length; i++) {
-                    r.elem({tag: "tr"}, function () {
-                        if (cbRepeat) cbRepeat(items[i], i);
-                    })
-                }
-            }
-            else {
-                r.elem({tag: "tr"}, function () {
-                    if (cbEmpty) cbEmpty();
-                })
-            }
-        })
-    });
-}
 
 
 
