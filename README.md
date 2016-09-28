@@ -35,13 +35,13 @@ rsf's only dependancy is jQuery - any recent version should suffice. Create a mi
 ```
 
 ## The rsf lifecycle
-When a web page is displayed the HTML page is rendered and any scripts (including the rsf application) are run. The rsf application should target one or more container elements on the page. Each rsf object then renders HTML inside it's container. 
+When a web page is displayed the HTML page is rendered and any scripts (including the rsf application) are run. The rsf application should target one or more container HTML elements on the page. Each rsf object then renders HTML inside it's container. 
 
-The HTML inside the container is created during the render phase. The hierarchy or tree of HTML elements is created by the subsequent invocation of the children functions for each element. traversal order ??
+The HTML inside the container is created during the render phase. The hierarchy or tree of HTML elements is created by the subsequent invocation of the children functions for each element. 
 
-Once all the HTML has been created the first bind phase starts. The bind object getter functions are called for all the rsf attributes on each element. Binding occurs on elements in the same order in which they were rendered. 
+Once all the HTML has been created the first bind phase starts. The bind object getter functions are called for all the rsf attributes on each element. Binding occurs on elements in the same order in which they were rendered. A bind phase always follows a render phase.
 
-This is the end of the lifecycle. However, the application can choose to render or bind the entire container or parts of it at any time. The application targets a part of the container by referencing an element by it's rsf ID. The element, and all it's children, is then rendered and/or bound. A bind phase always follows a render phase.
+This is the end of the lifecycle. However, the application can choose to render or bind the entire container or parts of it at any time. The application targets a part of the container by referencing an element by it's rsf ID. The element, and all it's children, are then rendered and/or bound.
 
 > The structure of the HTML within a container (by adding or removing elements) can only be changed by rendering again.  Binding can happen at ant time but it assumes that the page structure has not changed. Basically, don't add or remove  elements by using DOM or jQuery functions independently of rsf.
 
@@ -90,7 +90,7 @@ The `elem` method creates any HTML element at the current rendering location. A 
 **TO DO** - add method to install shortcuts (for now just edit the rsf source)
 
 **Arguments**
-- `attributes` - *Optional* An attributes object (see below) which is applied to the rendered element
+- `attributes` - *Optional* An `attributes` object (see below) which is applied to the rendered element
 - `children(r)`- *Optional* A callback which is called to render children of this element. `r` is the rsf object
 
 **Examples**
@@ -103,14 +103,14 @@ The `elem` method creates any HTML element at the current rendering location. A 
 
 ### render(id)
 
-Initiates a render starting on the element identified by the id parameter. If no id parameter is supplied the entire target container is rendered.
+Initiates a render starting on the element identified by the `id` parameter. If no `id` parameter is supplied the entire target container is rendered.
 
 **Arguments**
 - `id` - *Optional* A string referencing an `rsf` id. 
 
 
 ### bind(id)
-Initiates a bind starting on the element identified by the id parameter. If no id parameter is supplied the entire target container is bound.
+Initiates a bind starting on the element identified by the `id` parameter. If no `id` parameter is supplied the entire target container is bound.
 
 **Arguments**
 - `id` - *Optional* A string referencing an `rsf` id. 
@@ -129,9 +129,9 @@ The attributes object is applied to the element which is currently being rendere
 **Members**
 
 - `tag` - The type of HTML element to create (render). Only used by the `elem` method (do not use with shortcuts). This is only used in the render phase.
-- `id` - A string which may be used to identify the element so it may be targetted in future render or bind operations. Note - this is different from the HTML ID attribute. This is only used in the render phase.
-- `attr` - An object which is passed directly to the jQuery attr() function the results of which will be applied to he current element. This is only used in the render phase.
-- `css` - An object which is passed directly to the jQuery css() function the results of which will be applied to he current element. This is only used in the render phase.
+- `id` - A string which is used to identify the element so it may be targetted in future render or bind operations. Note - this is different from the HTML ID attribute. This is only used in the render phase.
+- `attr` - An object which is passed directly to the jQuery attr() function the results of which will be applied to the current element. This is only used in the render phase.
+- `css` - An object which is passed directly to the jQuery css() function the results of which will be applied to the current element. This is only used in the render phase.
 - `text` - A string (or function returning a string) which is passed directly to the jQuery text() function and will be rendered as innerText on the current element. Note - no further children will be rendered within this element.
 - `click` - An event object (see below) that is called when the element is "clicked".
 - `check` - A bind object (see below) which binds a boolean to an element (usually an INPUT tag of type "checkbox").
@@ -147,6 +147,8 @@ The attributes object is applied to the element which is currently being rendere
 - `title` -  A bind object which binds a string to the "title" attribute of the element.
 - `enter` -  An event object that is called when the rendered element is receives a "keyup" event for the "enter" key.
 - `data` -  An object that is associated with the element and it passed in the context object for setters and events (see below).
+
+**TO DO** - add method to install additional attribute members (for now just edit the rsf source)
 
 ## The bind object
 Bind objects comprise a get function (getter) and a set function (setter). The get and set functions allow a variable to be associated with an element. Bind functions are only active during the bind phase. The get function is called whenever the element binds to return the variable value to the element. The set function is called whenever the element needs to update the value of the variable. 
@@ -171,7 +173,7 @@ r.input({
 
 ```
 
-When binding an element that only requires a getter it is acceptable to specify a function (returning a value) or a value rather than a full bind object. This is shorter and more convenient, e.g:
+When binding an element that only requires a getter it is acceptable to specify a function (returning a value) or a value rather than a full bind object, it's shorter and more convenient, e.g:
 
 ```javascript
 r.h1({text: "my big header"});
@@ -185,16 +187,17 @@ Event objects comprise just an event function which is called whenever the eleme
 **Members**
 - `event(data, e, context)` - a function that is called when the DOM event fires. `e` is the jQuery event object, `context` is the `rsf` context object (see below).
 
-As a shortcut, you can just pass a function instead of an event object.
+As a shortcut, you can just pass the function instead of an event object.
 
 For example, a BUTTON element can use an event object to handle a click:
 
 ```javascript
+var clickCount = 0;
 r.button({
     attr: {type: "button"}, 
 	text: "my button",
     click: function () {
-        myHandler();
+        clickCount++;
     }
 });
 ```
