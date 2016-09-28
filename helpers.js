@@ -21,18 +21,14 @@ function select(r, select, options) {
 }
 
 // renders a TABLE tag with headers, and columns. Rows are build by the CBRepeat callback
-function table(r, table, items, headings, cbRepeat, cbEmpty) {
-    r.table(table, function() {
+function table(r, attr, items, headings, cbRepeat, cbEmpty) {
+    r.table(attr, function() {
         if (headings && $.isArray(headings) && headings.length > 0) {
             r.elem({tag: "thead"}, function () {
                 r.elem({tag: "tr"}, function () {
                     for (var i = 0; i < headings.length; i++) {
                         r.elem({tag: "th"}, function () {
-                            r.a({
-                                attr: {style: 'color: black'}, href: "#"
-                            }, function () {
-                                r.span({text: headings[i]});
-                            });
+                            r.span({text: headings[i]});
                         })
                     }
                 })
@@ -54,3 +50,4 @@ function table(r, table, items, headings, cbRepeat, cbEmpty) {
         })
     });
 }
+
