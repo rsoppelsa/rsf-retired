@@ -3,7 +3,7 @@
 
 rsf lets you write web pages in the browser using only Javascript. In conjunction with technologies like node.js it allows you to easily create web sites in just Javascript.
 
-HTML structures can be represented in code which can, in turn, be encapulated as functions. This makes HTML templating and repitition trivial. Page state can be simply stored within the page as Javascript variables. 
+HTML structures can be represented in code which can, in turn, be encapulated as functions. This makes HTML templating and repitition trivial. Page state can be stored simply within the page as Javascript variables. 
 
 ## Getting Started
 rsf's only dependancy is jQuery - any recent version should suffice. Create a minimal web page in html, include jQuery, the rsf library itself and a container element for rsf to target. The rsf application itself is written in Javascript, usually in a separate .js file:
