@@ -415,7 +415,6 @@ function RSF(root, child, children, options) {
         }
     }
 
-
     // issue callback for every child
     function scanDom(elem, cb) {
         cb(elem);
@@ -428,7 +427,6 @@ function RSF(root, child, children, options) {
 
     rsf.elem(child, children)
     bind(this.root, true);
-
 }
 
 
