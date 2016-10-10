@@ -1,5 +1,5 @@
 # rsf - really simple framework
-## *write HTML in Javascript*
+## *write HTML using Javascript*
 
 rsf lets you write web pages in the browser using only Javascript. In conjunction with technologies like node.js it allows you to easily create web sites in just Javascript.
 
